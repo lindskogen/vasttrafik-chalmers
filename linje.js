@@ -46,7 +46,13 @@ Linje.prototype.getTimeLeft = function(date) {
 };
 Linje.prototype.getTimeString = function(time) {
 	time = this.getTimeLeft(time);
-	return (time < 1 ? "Nu":time);
+	if (time < 1) {
+		return "Nu";
+	} else if (time > 60) {
+		var hours = parseInt(time/60);
+		return hours + "h " + time%60;;
+	}
+	return time;
 }
 
 function LinjeList() {
