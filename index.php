@@ -19,7 +19,6 @@ $locationRequest = array(
 $locationID = "http://api.vasttrafik.se/bin/rest.exe/location.name?" . http_build_query($locationRequest);
 $base_url = "http://api.vasttrafik.se/bin/rest.exe/departureBoard?" . http_build_query($requestData);
 //echo $base_url;
-
 //$jsonData = file_get_contents($base_url);
 ?>
 <html>
@@ -123,7 +122,7 @@ $base_url = "http://api.vasttrafik.se/bin/rest.exe/departureBoard?" . http_build
 		padding: 5px;
 	}
 	#entries tr:nth-child(even) {
-		background-color: #b2acab;
+		background-color: #dedede;
 	}
 	#entries tr:nth-child(odd) {
 		background-color: #c8c8c8;
