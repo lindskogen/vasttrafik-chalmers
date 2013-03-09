@@ -50,9 +50,9 @@ Linje.prototype.getTimeString = function(time) {
 		return "Nu";
 	} else if (time > 60) {
 		var hours = parseInt(time/60);
-		return hours + "h " + time%60;;
+		return hours + "h " + time%60 + "min";
 	}
-	return time;
+	return time + "min";
 }
 
 function LinjeList() {
