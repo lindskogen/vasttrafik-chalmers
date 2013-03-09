@@ -104,7 +104,7 @@ $base_url = "http://api.vasttrafik.se/bin/rest.exe/departureBoard?" . http_build
 		font-family: sans-serif;
 	}
 	#entries tr td:first-child {
-		text-align: right;
+		text-align: center;
 	}
 	#entries tr {
 		-webkit-transition: -webkit-transform 100ms ease-in;
