@@ -3,17 +3,22 @@ date_default_timezone_set('Europe/Stockholm');
 $AUTH_KEY = "42a193cf-a9b9-400f-8a15-c3db3a206251";
 $id_chalmers = "9021014001960000";
 $id_tvargata = "9021014001970000";
+$id_gbgC = "9021014008000000";
 
 $requestData = array(
 	"authKey" => $AUTH_KEY,
-	"id" => $id_chalmers,
+	"id" => $id_gbgC,
 	"date" => date("Y-m-d"), 
 	"format" => "json"
 );
-
-// $locationID = "http://api.vasttrafik.se/bin/rest.exe/location.name?input=Chalmers&authKey=42a193cf-a9b9-400f-8a15-c3db3a206251";
-
+$locationRequest = array(
+	"input" => "Göteborg",
+	"authKey" => $AUTH_KEY, 
+	"format" => "json"
+);
+$locationID = "http://api.vasttrafik.se/bin/rest.exe/location.name?" . http_build_query($locationRequest);
 $base_url = "http://api.vasttrafik.se/bin/rest.exe/departureBoard?" . http_build_query($requestData);
+//echo $base_url;
 
 //$jsonData = file_get_contents($base_url);
 ?>
@@ -24,22 +29,29 @@ $base_url = "http://api.vasttrafik.se/bin/rest.exe/departureBoard?" . http_build
 	<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 	<script type="text/javascript" src="linje.js"></script>
 	<script type="text/javascript">
+	console.info("<?php echo $base_url; ?>");
 	//var json = <?php echo $jsonData; ?>;
 	var linjer;
 	var maxLength = 0;
-	function fetchData() {
+	var ids = {
+		"chalmers": "9021014001960000",
+		"tvargata": "9021014001970000",
+		"gbgc": "9021014008000000"
+	};
+	function fetchData(id) {
 		$.getJSON("http://api.vasttrafik.se/bin/rest.exe/departureBoard?jsonpCallback=?", {
 			"authKey": "<?php echo $AUTH_KEY;?>",
-			"id": "<?php echo $id_chalmers;?>",
+			"id": (id?id:ids.chalmers),
 			"date": "<?php echo date("Y-m-d");?>",
 			"format": "json"
 		}, function(data) {
-			if (linjer === undefined)
-				linjer = new LinjeList();
+			console.log(data);
+			$("#stationName").html(data.DepartureBoard.Departure[0].stop);
+			linjer = new LinjeList();
 			$.each(data.DepartureBoard.Departure, function(key, value) {
 				linjer.push(value);
 				if (linjer.changed) {
-
+					// TODO: If a bus changes, only that bus should be moved/removed
 				}
 			});
 
@@ -64,14 +76,22 @@ $base_url = "http://api.vasttrafik.se/bin/rest.exe/departureBoard?" . http_build
 			trs.push($tr);
 		});
 		var $table = $("#entries");
+		$table.html("");
 		$.each(trs, function() {
 			$table.append(this);
 		})
 	}
 	$(document).ready(function() {
-		loopFetchData();
+		$.each(ids, function(key) {
+			$("#stations").append($("<option />", {"value": this, "html": key}));
+		})
+		fetchData(ids.chalmers);
+		//loopFetchData();
 		$("#entries").on("mouseover", "tr", function(elem){
 
+		});
+		$("#stations").on("change", function() {
+			fetchData(this.value);
 		});
 	});
 	function loopFetchData() {
@@ -80,6 +100,9 @@ $base_url = "http://api.vasttrafik.se/bin/rest.exe/departureBoard?" . http_build
 	}
 	</script>
 	<style type="text/css">
+	body {
+		font-family: sans-serif;
+	}
 	#entries tr td:first-child {
 		text-align: right;
 	}
@@ -91,7 +114,6 @@ $base_url = "http://api.vasttrafik.se/bin/rest.exe/departureBoard?" . http_build
 	}
 	#entries {
 		border-collapse: collapse;
-		font-family: sans-serif;
 	}
 	/*#entries tr:hover {
 		-webkit-transform: rotateX(90deg);
@@ -109,7 +131,6 @@ $base_url = "http://api.vasttrafik.se/bin/rest.exe/departureBoard?" . http_build
 	.bus-title {
 		font-size: 1.5em;
 		text-align: center;
-		/*border-radius: 5px;*/
 		padding: 0 5px;
 	}
 	.bus-time {
@@ -118,12 +139,15 @@ $base_url = "http://api.vasttrafik.se/bin/rest.exe/departureBoard?" . http_build
 	}
 	.removed {
 		-webkit-transform: rotateX(90deg);
+		-moz-transform: rotateX(90deg);
 	}
 
 	</style>
 </head>
 <body>
+	<select id="stations"></select>
 	<div>
+		<h2 id="stationName"></h2>
 		<table id="entries"></table>
 	</div>
 </body>
