@@ -32,7 +32,6 @@ $base_url = "http://api.vasttrafik.se/bin/rest.exe/departureBoard?" . http_build
 	console.info("<?php echo $base_url; ?>");
 	//var json = <?php echo $jsonData; ?>;
 	var linjer;
-	var maxLength = 0;
 	var ids = {
 		"chalmers": "9021014001960000",
 		"tvargata": "9021014001970000",
@@ -47,6 +46,7 @@ $base_url = "http://api.vasttrafik.se/bin/rest.exe/departureBoard?" . http_build
 		}, function(data) {
 			console.log(data);
 			$("#stationName").html(data.DepartureBoard.Departure[0].stop);
+			Linje.maxLength = 0;
 			linjer = new LinjeList();
 			$.each(data.DepartureBoard.Departure, function(key, value) {
 				linjer.push(value);
