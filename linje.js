@@ -1,10 +1,11 @@
 function Linje(dep) {
 	this.dep = dep;
 	this.id = dep.name + "|" + dep.direction;
-	if (dep.name.match(/\w+ \d+/))
-		this.name = dep.name.split(" ")[1].trim();
+	if (dep.name.match(/w+ \d+/))
+		this.name = dep.name.split(" ")[1];
 	else
 		this.name = dep.name.substr(0,3);
+	this.name = this.name.trim();
 	this.origName = dep.name;
 	this.color = {"fg" : dep.bgColor, "bg": dep.fgColor};
 	this.direction = dep.direction;

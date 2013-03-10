@@ -78,7 +78,7 @@ $base_url = "http://api.vasttrafik.se/bin/rest.exe/departureBoard?" . http_build
 			var $destName = $("<td />", {"class": "dest-title", "html": entry.direction});
 			$tr.append($busName, $destName);
 			var timeArray = entry.getTimes();
-			var min = Math.min(Linje.maxLength, 4);
+			var min = Math.min(Linje.maxLength, 2);
 			for (var i = 0; i < min; i++) {
 				var value = timeArray[i];
 				var $time = $("<td />", {"html": (value===undefined? "":value), "class": "bus-time"});
@@ -117,9 +117,6 @@ $base_url = "http://api.vasttrafik.se/bin/rest.exe/departureBoard?" . http_build
 	body {
 		font-family: sans-serif;
 	}
-	#entries tr td:first-child {
-		text-align: center;
-	}
 	#entries tr {
 		-webkit-transition: -webkit-transform 200ms ease-in;
 		-moz-transition: -moz-transform 200ms ease-in;
@@ -141,6 +138,11 @@ $base_url = "http://api.vasttrafik.se/bin/rest.exe/departureBoard?" . http_build
 	#entries tr:nth-child(odd) {
 		background-color: #c8c8c8;
 	}
+	#entries td.dest-title {
+		padding-left: 10px;
+		min-width: 240px;
+		border-right: 1px solid #fff;
+	}
 	.bus-title {
 		font-size: 1.5em;
 		text-align: center;
@@ -148,7 +150,7 @@ $base_url = "http://api.vasttrafik.se/bin/rest.exe/departureBoard?" . http_build
 	}
 	.bus-time {
 		text-align: right;
-		width: 70px;
+		width: 40px;
 	}
 	.removed {
 		-webkit-transform: rotateX(90deg);
