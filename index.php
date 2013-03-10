@@ -123,6 +123,9 @@ $base_url = "http://api.vasttrafik.se/bin/rest.exe/departureBoard?" . http_build
 	#entries tr {
 		-webkit-transition: -webkit-transform 200ms ease-in;
 		-moz-transition: -moz-transform 200ms ease-in;
+		-o-transition: -o-transform 200ms ease-in;
+		-ms-transition: -ms-transform 200ms ease-in;
+		transition: transform 200ms ease-in;
 		border-top: 1px solid #fff;
 		border-bottom: 1px solid #fff;
 	}
@@ -150,6 +153,9 @@ $base_url = "http://api.vasttrafik.se/bin/rest.exe/departureBoard?" . http_build
 	.removed {
 		-webkit-transform: rotateX(90deg);
 		-moz-transform: rotateX(90deg);
+		-o-transform: rotateX(90deg);
+		-ms-transform: rotateX(90deg);
+		transform: rotateX(90deg);
 	}
 	</style>
 </head>
