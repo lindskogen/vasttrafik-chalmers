@@ -150,7 +150,6 @@ $base_url = "http://api.vasttrafik.se/bin/rest.exe/departureBoard?" . http_build
 	}
 	.bus-time {
 		text-align: right;
-		width: 40px;
 	}
 	.removed {
 		-webkit-transform: rotateX(90deg);

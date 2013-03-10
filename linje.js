@@ -1,7 +1,7 @@
 function Linje(dep) {
 	this.dep = dep;
 	this.id = dep.name + "|" + dep.direction;
-	if (dep.name.match(/w+ \d+/))
+	if (dep.name.match(/\w+ \d+/))
 		this.name = dep.name.split(" ")[1];
 	else
 		this.name = dep.name.substr(0,3);
