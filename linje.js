@@ -54,14 +54,17 @@ Linje.prototype.getTimeLeft = function(date) {
 	return parseInt(timeLeft/60);
 };
 Linje.prototype.getTimeString = function(time) {
-	time = this.getTimeLeft(time);
-	if (time < 1) {
+	timeLeft = this.getTimeLeft(time);
+	if (timeLeft < 1) {
 		return "Nu";
-	} else if (time > 60) {
-		var hours = parseInt(time/60);
-		return hours + "h " + time%60 + "m";
+	} else if (timeLeft > 10) {
+		return time.toLocaleTimeString().substr(0,5);
 	}
-	return time + "m";
+	/*else if (timeLeft > 60) {
+		var hours = parseInt(timeLeft/60);
+		return hours + "h " + timeLeft%60 + "m";
+	}*/
+	return timeLeft + "m";
 }
 
 function LinjeList() {
