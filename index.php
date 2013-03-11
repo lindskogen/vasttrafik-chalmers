@@ -1,26 +1,4 @@
-<?php
-date_default_timezone_set('Europe/Stockholm');
-$AUTH_KEY = "42a193cf-a9b9-400f-8a15-c3db3a206251";
-$id_chalmers = "9021014001960000";
-$id_tvargata = "9021014001970000";
-$id_gbgC = "9021014008000000";
-
-$requestData = array(
-	"authKey" => $AUTH_KEY,
-	"id" => $id_gbgC,
-	"date" => date("Y-m-d"), 
-	"format" => "json"
-);
-$locationRequest = array(
-	"input" => "Göteborg",
-	"authKey" => $AUTH_KEY, 
-	"format" => "json"
-);
-$locationID = "http://api.vasttrafik.se/bin/rest.exe/location.name?" . http_build_query($locationRequest);
-$base_url = "http://api.vasttrafik.se/bin/rest.exe/departureBoard?" . http_build_query($requestData);
-//echo $base_url;
-//$jsonData = file_get_contents($base_url);
-?>
+<!doctype html>
 <html>
 <head>
 	<title>Västtrafik test</title>
@@ -28,8 +6,6 @@ $base_url = "http://api.vasttrafik.se/bin/rest.exe/departureBoard?" . http_build
 	<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 	<script type="text/javascript" src="linje.js"></script>
 	<script type="text/javascript">
-	console.info("<?php echo $base_url; ?>");
-	//var json = <?php echo $jsonData; ?>;
 	var oldLinjer = new LinjeList();
 	var linjer;
 	var currentValue;
@@ -39,15 +15,11 @@ $base_url = "http://api.vasttrafik.se/bin/rest.exe/departureBoard?" . http_build
 		"gbgc": "9021014008000000"
 	};
 	function fetchData(id) {
-		$.getJSON("http://api.vasttrafik.se/bin/rest.exe/departureBoard?jsonpCallback=?", {
-			"authKey": "<?php echo $AUTH_KEY;?>",
-			"id": (id?id:ids.chalmers),
-			"date": "<?php echo date("Y-m-d");?>",
-			"format": "json"
+		$.getJSON("vasttrafik.php?", {
+			"id": (id?id:ids.chalmers)
 		}, function(data) {
 			console.log("Reloaded");
 			Linje.now = new Date();
-			var dirtyRows = [];
 			$("#stationName").html(data.DepartureBoard.Departure[0].stop);
 			Linje.maxLength = 0;
 			linjer = new LinjeList();
