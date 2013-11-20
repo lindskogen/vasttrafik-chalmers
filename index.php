@@ -3,8 +3,10 @@
 <head>
 	<title>Västtrafik test</title>
 	<meta charset="utf-8" />
+	<link href="//fonts.googleapis.com/css?family=Roboto:900,400,300" rel='stylesheet' type='text/css'>
 	<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 	<script type="text/javascript" src="linje.js"></script>
+	<script type="text/javascript" src="moment-with-langs.min.js"></script>
 	<script type="text/javascript">
 	var oldLinjer = new LinjeList();
 	var linjer;
@@ -18,12 +20,12 @@
 		$.getJSON("vasttrafik.php?", {
 			"id": (id?id:ids.chalmers)
 		}, function(data) {
-			console.log("Reloaded");
-			Linje.now = new Date();
-			$("#stationName").html(data.DepartureBoard.Departure[0].stop);
+			var depBoard = data.DepartureBoard;
+			Linje.now = toDate(depBoard.serverdate, depBoard.servertime);
+			$("#stationName").html(depBoard.Departure[0].stop);
 			Linje.maxLength = 0;
 			linjer = new LinjeList();
-			$.each(data.DepartureBoard.Departure, function(key, value) {
+			$.each(depBoard.Departure, function(key, value) {
 				linjer.push(value);
 			});
 			linjer.list.sort(linjeListSort);
@@ -42,10 +44,6 @@
 		var trs = [];
 		$.each(linjer, function(key, entry) {
 			var $tr = $("<tr />");
-			if (entry.dirty) {
-				$tr.addClass("removed");
-				entry.dirty = false;
-			}
 			var $busName = $("<td />", {"class": "bus-title", "html": entry.name}).css({"background-color": entry.color.bg, "color": entry.color.fg});
 			var $destName = $("<td />", {"class": "dest-title", "html": entry.direction});
 			$tr.append($busName, $destName);
@@ -63,21 +61,15 @@
 		$.each(trs, function() {
 			$table.append(this);
 		});
-		setTimeout(function() {
-			$(".removed").removeClass("removed");
-		}, 100);
 	}
 	$(document).ready(function() {
 		$.each(ids, function(key) {
 			$("#stations").append($("<option />", {"value": this, "html": key}));
 		})
 		loopFetchData();
-		$("#entries").on("mouseover", "tr", function(elem){
-
-		});
 		$("#stations").on("change", function() {
-			fetchData(this.value);
 			currentValue = this.value;
+			fetchData(currentValue);
 		});
 	});
 	function loopFetchData() {
@@ -86,23 +78,54 @@
 	}
 	</script>
 	<style type="text/css">
+	@-webkit-keyframes rotateIn {
+		from {
+			-webkit-transform: rotateX(90deg);
+		} to {
+			-webkit-transform: rotateX(0deg);
+		}
+	}
+	@-moz-keyframes rotateIn {
+		from {
+			-moz-transform: rotateX(90deg);
+		} to {
+			-moz-transform: rotateX(0deg);
+		}
+	}
+	@-o-keyframes rotateIn {
+		from {
+			-o-transform: rotateX(90deg);
+		} to {
+			-o-transform: rotateX(0deg);
+		}
+	}
+	@keyframes rotateIn {
+		from {
+			transform: rotateX(90deg);
+		} to {
+			transform: rotateX(0deg);
+		}
+	}
 	body {
-		font-family: sans-serif;
+		font-family: 'Roboto', sans-serif;
+		font-size: 1.5em;
+		margin: 0;
+		font-weight: lighter;
 	}
 	#entries tr {
-		-webkit-transition: -webkit-transform 200ms ease-in;
-		-moz-transition: -moz-transform 200ms ease-in;
-		-o-transition: -o-transform 200ms ease-in;
-		-ms-transition: -ms-transform 200ms ease-in;
-		transition: transform 200ms ease-in;
+		-webkit-animation: rotateIn 200ms ease-in;
+		-moz-animation: rotateIn 200ms ease-in;
+		-o-animation: rotateIn 200ms ease-in;
+		animation: rotateIn 200ms ease-in;
 		border-top: 1px solid #fff;
 		border-bottom: 1px solid #fff;
 	}
 	#entries {
+		width: 700px;
 		border-collapse: collapse;
 	}
 	#entries td {
-		padding: 5px;
+		padding: 0;
 	}
 	#entries tr:nth-child(even) {
 		background-color: #dedede;
@@ -111,32 +134,28 @@
 		background-color: #c8c8c8;
 	}
 	#entries td.dest-title {
+		font-weight: normal;
 		padding-left: 10px;
 		min-width: 240px;
 		border-right: 1px solid #fff;
 	}
-	.bus-title {
+	#entries td.bus-title {
+		font-weight: bolder;
 		font-size: 1.5em;
 		text-align: center;
-		padding: 0 5px;
+		padding: 5px;
 	}
 	#entries td.bus-time {
 		padding: 5px 10px;
 		text-align: right;
-	}
-	.removed {
-		-webkit-transform: rotateX(90deg);
-		-moz-transform: rotateX(90deg);
-		-o-transform: rotateX(90deg);
-		-ms-transform: rotateX(90deg);
-		transform: rotateX(90deg);
+		font-size: 1.5em;
 	}
 	</style>
 </head>
 <body>
-	<select id="stations"></select>
+	<!--<select id="stations"></select>-->
 	<div>
-		<h2 id="stationName"></h2>
+		<!--<h2 id="stationName"></h2>-->
 		<table id="entries"></table>
 	</div>
 </body>

@@ -35,7 +35,7 @@ Linje.prototype.addTime = function(dep) {
 	if (!Linje.maxLength || this.times.length > Linje.maxLength)
 		Linje.maxLength = this.times.length;
 	return true;
-}
+};
 Linje.prototype.getTimes = function() {
 	var list = [];
 	for (var key in this.times) {
@@ -46,7 +46,7 @@ Linje.prototype.getTimes = function() {
 		list.push(this.getTimeString(value));
 	}
 	return list;
-}
+};
 Linje.prototype.getTimeLeft = function(date) {
 	if (date === undefined)
 		date = this.times[0];
@@ -54,6 +54,7 @@ Linje.prototype.getTimeLeft = function(date) {
 	return parseInt(timeLeft/60);
 };
 Linje.prototype.getTimeString = function(time) {
+	timeLeft = moment(time).diff(moment(), 'minutes')
 	timeLeft = this.getTimeLeft(time);
 	if (timeLeft < 1) {
 		return "Nu";
@@ -64,8 +65,9 @@ Linje.prototype.getTimeString = function(time) {
 		var hours = parseInt(timeLeft/60);
 		return hours + "h " + timeLeft%60 + "m";
 	}*/
-	return timeLeft + "m";
-}
+	//return timeLeft + "m";
+	return timeLeft + 'm';
+};
 
 function LinjeList() {
 	this.list = [];
@@ -74,8 +76,7 @@ LinjeList.prototype.push = function(dep) {
 	for (var i = 0; i < this.list.length; i++) {
 		var entry = this.list[i];
 		if (entry.origName === dep.name && entry.direction === dep.direction) {
-			if (entry.addTime(dep))
-				entry.dirty = true;
+			entry.addTime(dep);
 			return entry;
 		}
 	}
