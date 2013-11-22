@@ -51,21 +51,15 @@ Linje.prototype.getTimeLeft = function(date) {
 	if (date === undefined)
 		date = this.times[0];
 	var timeLeft = (date - Linje.now)/1000;
-	return parseInt(timeLeft/60);
+	return parseInt(timeLeft/60, 10);
 };
 Linje.prototype.getTimeString = function(time) {
-	timeLeft = moment(time).diff(moment(), 'minutes')
-	timeLeft = this.getTimeLeft(time);
+	timeLeft = moment(time).diff(moment(), 'minutes');
 	if (timeLeft < 1) {
-		return "Nu";
+		return 'Nu';
 	} else if (timeLeft > 10) {
 		return time.toLocaleTimeString().substr(0,5);
 	}
-	/*else if (timeLeft > 60) {
-		var hours = parseInt(timeLeft/60);
-		return hours + "h " + timeLeft%60 + "m";
-	}*/
-	//return timeLeft + "m";
 	return timeLeft + 'm';
 };
 
