@@ -6,7 +6,7 @@ class App
 		@initLoop()
 	initLoop: =>
 		@reloadData()
-		setTimeout @initLoop, 2000
+		setTimeout @initLoop, 20000
 	reloadData: (id) ->
 		id = id || @id
 		$.getJSON 'vasttrafik.php?', 'id': id, (data) =>
